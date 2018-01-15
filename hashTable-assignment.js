@@ -46,11 +46,35 @@ HashTable.prototype.insert = function(k, v) {
   }
 };
 
-HashTable.prototype.retrieve = function(k) {
+HashTable.prototype.retrieve = function(k, this.storage) {
  // add your code here
+ debugger;
+  var index = getIndexForKey(k, this.limit);
+
+  for(var i = 0; i < this.storage[index].length; i++) {
+    if (k === this.storage[index][i][0]) {
+      return this.storage[index][i][1];
+    }
+  }
+  return undefined;
 };
 
 HashTable.prototype.remove = function(k) {
   // add your code here
+  var index = getIndexForKey(k, this.limit);
+  var memory = this.storage[index];
+
+  if (memory) {
+    for (var i = 0; i < memory.length; i++) {
+      if (k === memory[i][0]) {
+        memory.splice(i, 1);
+        if(!memory.length) {
+          delete this.storage[index];
+        }
+      }
+    }
+  }
+
+  
 
 };
