@@ -11,7 +11,7 @@
 // This is a "hashing function". You don't need to worry about it, just use it
 // to turn any string into an integer that is well-distributed between the
 // numbers 0 and `max`
-var getIndexForKey = function(str, max) {
+var getIndexForKey = function (str, max) {
   var hash = 0;
   for (var i = 0; i < str.length; i++) {
     hash = (hash << 5) + hash + str.charCodeAt(i);
@@ -23,39 +23,48 @@ var getIndexForKey = function(str, max) {
 
 ///////////////////////////////////////////////////////////////
 
-var HashTable = function() {
+var HashTable = function () {
   this.limit = 8;
   this.storage = [];
   this.length = this.storage.length
-  console.log('initial length', this.length);
-  if ((this.storage.length/2) === this.length) {
-    this.limit = this.limit*2;
-  }
+  console.log('this.length', this.length, 'this.storage.length', this.storage.length);
+  // if (!this.length) {
+  //   null;
+  // } else if (this.length === (this.storage.length)) {
+  //   this.limit = this.limit * 2;
+  // } else if (this.length <= (this.storage.length * 2)) {
+  //   this.limit = this.limit / 2;
+  // }
 };
 
-HashTable.prototype.insert = function(k, v) {
+HashTable.prototype.insert = function (k, v) {
   var index = getIndexForKey(k, this.limit);
 
-  if(!this.storage[index]) { // the location is empty [empty, ......]
+  if (!this.storage[index]) { // the location is empty [empty, ......]
     this.storage[index] = []; //[[]. .....]
-    this.storage[index].push([k,v]) //[[[k,v]],.....]
-    this.length++
+    this.storage[index].push([k, v]) //[[[k,v]],.....]
+    this.length++;
+    console.log('this.length', this.length, 'this.storage.length', this.storage.length);
+    if (this.length === (this.storage.length/2)) {
+      this.limit = this.limit * 2;
+    }
   } else { // location is not empty, means collision
-    for(var i = 0; i < this.storage[index].length; i++) { // iterate over the array in the selected location
-      if(k === this.storage[index][i][0]){ // if the key is already there
+    for (var i = 0; i < this.storage[index].length; i++) { // iterate over the array in the selected location
+      if (k === this.storage[index][i][0]) { // if the key is already there
         this.storage[index][i][1] = v; // replace the value with new value
-        return; 
+        console.log('this.length', this.length, 'this.storage.length', this.storage.length);
+        return;
       }
     }
-    this.storage[index].push([k,v]); // if collisin but unique key then add it to the location array
+    this.storage[index].push([k, v]); // if collisin but unique key then add it to the location array
   }
 };
 
-HashTable.prototype.retrieve = function(k) {
- // add your code here
+HashTable.prototype.retrieve = function (k) {
+  // add your code here
   var index = getIndexForKey(k, this.limit);
 
-  for(var i = 0; i < this.storage[index].length; i++) {
+  for (var i = 0; i < this.storage[index].length; i++) {
     if (k === this.storage[index][i][0]) {
       return this.storage[index][i][1];
     }
@@ -63,7 +72,7 @@ HashTable.prototype.retrieve = function(k) {
   return undefined;
 };
 
-HashTable.prototype.remove = function(k) {
+HashTable.prototype.remove = function (k) {
   // add your code here
   var index = getIndexForKey(k, this.limit);
   var memory = this.storage[index];
@@ -72,13 +81,15 @@ HashTable.prototype.remove = function(k) {
     for (var i = 0; i < memory.length; i++) {
       if (k === memory[i][0]) {
         memory.splice(i, 1);
-        if(!memory.length) {
+        this.length--;
+        console.log('this.length', this.length, 'this.storage.length', this.storage.length);
+        if (this.length <= (this.storage.length * 2)) {
+          this.limit = this.limit / 2;
+        }
+        if (!memory.length) {
           delete this.storage[index];
         }
       }
     }
   }
-
-  
-
 };
