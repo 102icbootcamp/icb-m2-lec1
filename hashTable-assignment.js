@@ -26,6 +26,11 @@ var getIndexForKey = function(str, max) {
 var HashTable = function() {
   this.limit = 8;
   this.storage = [];
+  this.length = this.storage.length
+  console.log('initial length', this.length);
+  if ((this.storage.length/2) === this.length) {
+    this.limit = this.limit*2;
+  }
 };
 
 HashTable.prototype.insert = function(k, v) {
@@ -34,7 +39,7 @@ HashTable.prototype.insert = function(k, v) {
   if(!this.storage[index]) { // the location is empty [empty, ......]
     this.storage[index] = []; //[[]. .....]
     this.storage[index].push([k,v]) //[[[k,v]],.....]
-
+    this.length++
   } else { // location is not empty, means collision
     for(var i = 0; i < this.storage[index].length; i++) { // iterate over the array in the selected location
       if(k === this.storage[index][i][0]){ // if the key is already there
