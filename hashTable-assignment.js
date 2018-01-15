@@ -46,9 +46,8 @@ HashTable.prototype.insert = function(k, v) {
   }
 };
 
-HashTable.prototype.retrieve = function(k, this.storage) {
+HashTable.prototype.retrieve = function(k) {
  // add your code here
- debugger;
   var index = getIndexForKey(k, this.limit);
 
   for(var i = 0; i < this.storage[index].length; i++) {
