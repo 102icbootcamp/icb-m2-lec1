@@ -1,71 +1,46 @@
-// obj = {name: 'yasser'}
-// obj.name = 'yasser'
-// obj.name = 'mahmud'
-// obj.age = 45
-// use  agenerator 0 - 7, this will give an index
-// arr[1] arr[1] arr[2]
-// arr = [empty, [ ['name', 'yasser'], ['age', 45] ],..........empty]
-// arr = [location=empty, location[],]
-
-
-// This is a "hashing function". You don't need to worry about it, just use it
-// to turn any string into an integer that is well-distributed between the
-// numbers 0 and `max`
 var getIndexForKey = function (str, max) {
   var hash = 0;
   for (var i = 0; i < str.length; i++) {
     hash = (hash << 5) + hash + str.charCodeAt(i);
-    hash = hash & hash; // Convert to 32bit integer
+    hash = hash & hash;
     hash = Math.abs(hash);
   }
   return hash % max;
 };
 
-///////////////////////////////////////////////////////////////
-
 var HashTable = function () {
   this.limit = 8;
   this.storage = [];
-  this.length = this.storage.length
-  console.log('this.length', this.length, 'this.storage.length', this.storage.length);
-  // if (!this.length) {
-  //   null;
-  // } else if (this.length === (this.storage.length)) {
-  //   this.limit = this.limit * 2;
-  // } else if (this.length <= (this.storage.length * 2)) {
-  //   this.limit = this.limit / 2;
-  // }
-};
+  this.length = this.storage.length;
+}
 
-HashTable.prototype.insert = function (k, v) {
+HashTable.prototype.insert = function(k, v) {
   var index = getIndexForKey(k, this.limit);
 
-  if (!this.storage[index]) { // the location is empty [empty, ......]
-    this.storage[index] = []; //[[]. .....]
-    this.storage[index].push([k, v]) //[[[k,v]],.....]
-    this.length++;
-    console.log('this.length', this.length, 'this.storage.length', this.storage.length);
-    if (this.length === (this.storage.length/2)) {
+  if (!this.storage[index]) {
+    this.storage[index] = [];
+    this.storage[index].push([k, v]);
+    this.length = this.storage.length;
+    if (this.length >= (this.limit/2)) {
       this.limit = this.limit * 2;
     }
-  } else { // location is not empty, means collision
-    for (var i = 0; i < this.storage[index].length; i++) { // iterate over the array in the selected location
-      if (k === this.storage[index][i][0]) { // if the key is already there
-        this.storage[index][i][1] = v; // replace the value with new value
+  } else {
+    for (var i = 0; i < this.storage[index].length; i++) {
+      if (k === this.storage[index][i][0]) {
+        this.storage[index][i][1] = v;
         console.log('this.length', this.length, 'this.storage.length', this.storage.length);
         return;
       }
     }
-    this.storage[index].push([k, v]); // if collisin but unique key then add it to the location array
+    this.storage[index].push([k, v]);
   }
 };
 
 HashTable.prototype.retrieve = function (k) {
-  // add your code here
   var index = getIndexForKey(k, this.limit);
 
   for (var i = 0; i < this.storage[index].length; i++) {
-    if (k === this.storage[index][i][0]) {
+    if (k === this.storage[index][i[0]]) {
       return this.storage[index][i][1];
     }
   }
@@ -73,7 +48,6 @@ HashTable.prototype.retrieve = function (k) {
 };
 
 HashTable.prototype.remove = function (k) {
-  // add your code here
   var index = getIndexForKey(k, this.limit);
   var memory = this.storage[index];
 
@@ -82,8 +56,7 @@ HashTable.prototype.remove = function (k) {
       if (k === memory[i][0]) {
         memory.splice(i, 1);
         this.length--;
-        console.log('this.length', this.length, 'this.storage.length', this.storage.length);
-        if (this.length <= (this.storage.length * 2)) {
+        if (this.length <= (this.limit * 2)) {
           this.limit = this.limit / 2;
         }
         if (!memory.length) {
