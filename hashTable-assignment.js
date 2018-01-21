@@ -47,10 +47,54 @@ HashTable.prototype.insert = function(k, v) {
 };
 
 HashTable.prototype.retrieve = function(k) {
- // add your code here
+
+    var index = getIndexForKey(k,this.limit);
+    
+    if(this.storage[index]){
+        
+        
+        for(i = 0; i<this.storage[index].length; i++){
+        
+            if(k === this.storage[index][i][0]){
+            
+            return this.storage[index][i][1];
+            }
+        
+        
+        }
+    }
+    else{
+        return undefined;
+    }
+    
+    // add your code here
 };
 
 HashTable.prototype.remove = function(k) {
   // add your code here
-
+    var index = getIndexForKey(k,this.limit);
+    
+    if(this.storage[index]){
+        
+        for (i=0; i < this.storage[index].length;i++){
+        
+            if(k === this.storage[index][i][0]){
+            
+                var temp = this.storage[index][i][1]; //temp will return the del val of key
+                this.storage[index].splice(i,1);
+                
+                if(!this.storage[index].length){
+                    delete this.storage[index]; //del the empty array.
+                }
+                
+                return temp;
+            }
+        }
+    }
+    
+    else{
+        return undefined;
+    }
+    
 };
+
