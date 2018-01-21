@@ -47,10 +47,39 @@ HashTable.prototype.insert = function(k, v) {
 };
 
 HashTable.prototype.retrieve = function(k) {
- // add your code here
+        // add your code here
+     var index = getIndexForKey(k, this.limit);
+
+  if(this.storage[index]) { // the location is not empty 
+    
+       for(var i = 0; i < this.storage[index].length; i++) { // iterate over the array in the selected location
+          if(k === this.storage[index][i][0]){ // if the key is matched
+            return   this.storage[index][i][1]; // return the valu
+          }
+
+        }  
+  }
 };
 
 HashTable.prototype.remove = function(k) {
   // add your code here
 
-};
+var index = getIndexForKey(k, this.limit);
+
+  if(this.storage[index]) { // the location is not empty 
+    
+       for(var i = 0; i < this.storage[index].length; i++) { // iterate over the array in the selected location
+          if(k === this.storage[index][i][0]){
+                this.storage[index].splice(i,1)
+            
+           }
+           
+
+        }    
+  };
+}
+var obj= new HashTable();
+obj.insert("name", "waqar1");
+obj.insert('age', 45);
+obj.insert('naem', 'waqar2');
+console.log(obj);
